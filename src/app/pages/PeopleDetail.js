@@ -1,18 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
+import Modal from "react-bootstrap/Modal";
+import Button from 'react-bootstrap/Button';
+import { PencilSquare } from 'react-bootstrap-icons';
 
 import Url from "../api/url";
 
+import LedgerForm from "../components/LedgerForm"
+import PaymentForm from "../components/PaymentForm"
+
 function PeopleDetail(props) {
     const [ledperson, setLedperson] = useState({});
+    const [leditem, setLeditem] = useState({});
     const [products, setProducts] = useState([]);
     const [payments, setPayments] = useState([]);
+    const [payment, setPayment] = useState([]);
     const [totals, setTotals] = useState([]);
     const [totalPayment, setTotalPayment] = useState([]);
     const [superTotal, setSuperTotal] = useState(0)
@@ -22,12 +30,44 @@ function PeopleDetail(props) {
     const [errorFreePay, setErrorFreePay] = useState(true)
     const params = useParams();
     const id = params.id;
+    const navigate = useNavigate();
+
+    //Modal Ledger form
+    const [showModalLedger, setShowModalLedger] = useState(false);
+    const [editLedger, setEditLedger] = useState(false)
+    const handleShowModalLedger = () => setShowModalLedger(true); 
+    const handleCloseModalLedger = () => {
+      setShowModalLedger(false);
+      // navigate(`/people/${id}`);
+      window.location.reload();
+    }
+    const handleShowModalLedgerEdit = (idledger) => {
+      console.log(idledger);
+      setEditLedger(true);
+      setShowModalLedger(true)
+      setLeditem(ledperson.filter(function(item){return item.pk == idledger })[0])
+    }
+
+    //Modal Payment form
+    const [showModalPayment, setShowModalPayment] = useState(false);
+    const [editPayment, setEditPayment] = useState(false)
+    const handleShowModalPayment = () => setShowModalPayment(true);
+    const handleCloseModalPayment = () => {
+      setShowModalPayment(false);
+      window.location.reload();
+    }
+    const handleShowModalPaymentEdit = (idpayment) => {
+      setEditPayment(true);
+      setShowModalPayment(true)
+      setPayment(payments.filter(function(item){return item.pk == idpayment })[0])
+    }
 
   const getledgerperson = async() => {
       // axios.get(Url.baseUrl + `/people/${id}`, {
-      axios.get(Url.baseUrl + `/ledger/?person=${id}`)
+      axios.get(Url.baseUrl + `receivedget/?person=${id}`)
       .then((response) => {
           setLedperson(response.data.results)
+          console.log('ledperson: ', response.data.results)
           // console.log(response.data.results)
           const res = response.data.results
           if (Array.isArray(response.data.results) && response.data.results.length === 0) {
@@ -55,8 +95,10 @@ function PeopleDetail(props) {
             // console.log('tot: ', tot)
             let subtot = 0
             tot.map((it)=>{
-              subtot += it.quantity * it.product.cost
+              //subtot += it.quantity * it.product.cost
+              subtot += parseFloat(it.amount)
             })
+            console.log('subtot: ', subtot)
             totalSum.push(subtot)
             setTotals(totalSum)
             console.log('totals:', totalSum)      
@@ -72,7 +114,7 @@ function PeopleDetail(props) {
   }
 
 const getPayments = async() => {
-    axios.get(Url.baseUrl + `/payments/?person=${id}`)
+    axios.get(Url.baseUrl + `payments/?person=${id}`)
     .then((response) => {
         console.log(response.data.results)
         setPayments(response.data.results)
@@ -92,21 +134,8 @@ const getPayments = async() => {
     })  
 }
 
-  // const getProducts = async() => {
-  //   axios.get(Url.baseUrl + `/products`)
-  //   .then((response) => {
-  //       console.log(response.data.results)
-  //       const res = response.data.results
-  //       setProducts(response.data.results)
-  //   })
-  //   .catch((error) => {
-  //       console.log(error);
-  //   })
-  // }
-
 useEffect(() => {     
   getledgerperson();
-  // getProducts();
   getPayments();
 }, []);
 
@@ -123,6 +152,10 @@ useEffect(() => {
       </Row>
       <Row>
         <Col>
+        <h4>Production</h4>
+        <Button variant="primary" onClick={handleShowModalLedger}>
+          Input ledger
+      </Button>
       {products.map((item, index)=>{
         return(
           <Row>
@@ -130,9 +163,13 @@ useEffect(() => {
            <Table striped bordered hover>
             <thead>
               <tr key={index}>
-                <th>Quantity</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Qt</th>
                 <th>Cost</th>
                 <th>Total</th>
+                <th>Amount</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody>
@@ -141,14 +178,21 @@ useEffect(() => {
             }).map((item3, index2)=>{
                 return(
                 <tr key={index2}>
+                  <td style={{'text-align':'left'}}>{item3.date}</td>
+                  <td style={{'text-align':'left'}}>{item3.description}</td>
                   <td style={{'text-align':'right'}}>{item3.quantity}</td>
-                  <td style={{'text-align':'right'}}>{item3.product.cost}</td>
-                  <td style={{'text-align':'right'}}>{(item3.quantity * item3.product.cost).toFixed(2)}</td>
+                  <td style={{'text-align':'right'}}>{item3.value}</td>
+                  <td style={{'text-align':'right'}}>{(item3.quantity * item3.value).toFixed(2)}</td>
+                  <td style={{'text-align':'right'}}>{item3.amount}</td>
+                  <td><PencilSquare color="royalblue" size={28} onClick={()=>handleShowModalLedgerEdit(item3.pk)}/></td>
                 </tr>
               )
             })}
             <tr style={{'font-weight':'bold'}}>
-              <td>Total</td>
+              <td>Subtotal</td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td style={{'text-align':'right'}}>{totals[index].toFixed(2)}</td>
             </tr>
@@ -170,15 +214,19 @@ useEffect(() => {
       )}
       </Row>
       </Col>
-      {errorFreePay && (
         <Col>
         <h3>Payments</h3>
+        <Button variant="primary" onClick={handleShowModalPayment}>
+          Input payment
+        </Button>
+      {errorFreePay && (
           <Table striped bordered hover>
           <thead>
             <tr>
               <th>Date</th>
               <th>Description</th>
               <th>Amount</th>
+              <th>Edit</th>
             </tr>
           </thead>
           <tbody>
@@ -188,6 +236,7 @@ useEffect(() => {
                   <td>{item.date}</td>
                   <td>{item.description}</td>
                   <td style={{'text-align':'right'}}>{item.amount}</td>
+                  <td><PencilSquare color="royalblue" size={28} onClick={()=>handleShowModalPaymentEdit(item.pk)}/></td>
                 </tr>            
               )
             })}
@@ -198,13 +247,28 @@ useEffect(() => {
             </tr>
           </tbody>
         </Table>
-        </Col>
         )}
-
-
-
-
+        </Col>
       </Row>
+
+      {showModalLedger && (
+        <LedgerForm
+          showModalLedger={showModalLedger}
+          handleCloseModalLedger={handleCloseModalLedger}
+          id={id}
+          leditem={leditem}
+          editLedger={editLedger}
+        />
+      )}
+      {showModalPayment && (
+        <PaymentForm
+          showModalPayment={showModalPayment}
+          handleCloseModalPayment={handleCloseModalPayment}
+          id={id}
+          payment={payment}
+          editPayment={editPayment}
+        />
+      )}
     </Container> 
      );
 }

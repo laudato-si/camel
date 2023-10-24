@@ -16,7 +16,7 @@ function People(props) {
       };    
 
 const getPeople = async() => {
-    axios.get(Url.baseUrl + `summary/`)
+    axios.get(Url.baseUrl + `summary/`, {headers: headers,})
         .then((response) => {
             let res = response.data
             // const payLedger = 'ledger'
@@ -63,7 +63,7 @@ const getPeople = async() => {
             return(
                 <tr key={index}>
                     <td>
-                        <Link to={`/people/${item.id}`} className='link'>{item.name}</Link>
+                        <Link to={`/people/${item.id}`} className='link'>{item.name} {item.surname}</Link>
                     </td>
                     <td>{item.cost}</td>
                     <td>{item.payment}</td>
