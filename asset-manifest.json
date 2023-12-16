@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/camel/static/css/main.66265f86.css",
-    "main.js": "/camel/static/js/main.2baa92db.js",
+    "main.css": "/camel/static/css/main.f83b2aad.css",
+    "main.js": "/camel/static/js/main.e12f1e9d.js",
     "static/js/787.8077c6cf.chunk.js": "/camel/static/js/787.8077c6cf.chunk.js",
     "index.html": "/camel/index.html",
-    "main.66265f86.css.map": "/camel/static/css/main.66265f86.css.map",
-    "main.2baa92db.js.map": "/camel/static/js/main.2baa92db.js.map",
+    "main.f83b2aad.css.map": "/camel/static/css/main.f83b2aad.css.map",
+    "main.e12f1e9d.js.map": "/camel/static/js/main.e12f1e9d.js.map",
     "787.8077c6cf.chunk.js.map": "/camel/static/js/787.8077c6cf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.66265f86.css",
-    "static/js/main.2baa92db.js"
+    "static/css/main.f83b2aad.css",
+    "static/js/main.e12f1e9d.js"
   ]
 }
