@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/camel/static/css/main.77e88b26.css",
-    "main.js": "/camel/static/js/main.59d6a041.js",
+    "main.js": "/camel/static/js/main.4389a98e.js",
     "static/js/787.8077c6cf.chunk.js": "/camel/static/js/787.8077c6cf.chunk.js",
     "static/media/back1.png": "/camel/static/media/back1.b3383126d52cd7e3243a.png",
     "index.html": "/camel/index.html",
     "main.77e88b26.css.map": "/camel/static/css/main.77e88b26.css.map",
-    "main.59d6a041.js.map": "/camel/static/js/main.59d6a041.js.map",
+    "main.4389a98e.js.map": "/camel/static/js/main.4389a98e.js.map",
     "787.8077c6cf.chunk.js.map": "/camel/static/js/787.8077c6cf.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.77e88b26.css",
-    "static/js/main.59d6a041.js"
+    "static/js/main.4389a98e.js"
   ]
 }
