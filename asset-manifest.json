@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/camel/static/css/main.f262cb49.css",
+    "main.js": "/camel/static/js/main.ad394fab.js",
+    "static/js/787.8077c6cf.chunk.js": "/camel/static/js/787.8077c6cf.chunk.js",
+    "static/media/back1.png": "/camel/static/media/back1.b3383126d52cd7e3243a.png",
+    "index.html": "/camel/index.html",
+    "main.f262cb49.css.map": "/camel/static/css/main.f262cb49.css.map",
+    "main.ad394fab.js.map": "/camel/static/js/main.ad394fab.js.map",
+    "787.8077c6cf.chunk.js.map": "/camel/static/js/787.8077c6cf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f262cb49.css",
+    "static/js/main.ad394fab.js"
+  ]
+}
